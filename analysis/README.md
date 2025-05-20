@@ -1,43 +1,22 @@
-# EEG Lab Rotation Project – Chronotype and Cognitive Control in the PVT
+# 📈 EEG & Behavioral Data Analysis Scripts
 
-This repository documents a lab rotation project focused on how chronotype (morningness/eveningness) and time of day influence sustained attention in a Psychomotor Vigilance Task (PVT), using EEG measures.
+This folder contains the Python scripts used to analyze data collected during the PVT EEG lab rotation project.
 
-## 🧠 Objective
+## 📄 File Descriptions
 
-To test whether evening-type individuals show time-of-day-dependent effects in their behavioral (reaction time) and neural (ERP) responses during a PVT.
+- `EEG_analysis.py`  
+  Prepares EEG-derived measures for statistical analysis, focusing on P1 amplitude across sessions and conditions.
 
-## 🧪 Methods
+- `behavioral_analysis.py`  
+  Processes and compares reaction times across sessions (morning vs evening), including basic summary stats and visualizations.
 
-- 20 evening-type participants
-- Within-subject design: EEG recorded in the **morning (8 AM)** and **evening (6 PM)**
-- EEG preprocessing with **BrainVision Analyzer**
-- Statistical analysis in **Python** using repeated-measures ANOVA
-- Focused on the **P1 ERP component** at parietal-occipital electrodes (P3, P4, P7, P8, Pz)
-
-## 📊 Results
-
-- No significant main effects were found for time of day on P1 amplitude or reaction time
-- ERP data showed consistent morphology, suggesting **stable performance**
-- Nonetheless, the project provided hands-on experience with:
-  - EEG data acquisition and preprocessing
-  - Visualization and plotting
-  - Python-based analysis workflows
-
-## 📁 Repository Contents
-
-| File/Folder         | Description                                  |
-|---------------------|----------------------------------------------|
-| `poster.pdf`        | Final poster presented at lab meeting        |
-| `figures/`          | ERP plots and topographic maps from BVA      |
-| `analysis.py`       | (Optional) Python script for ERP/statistics  |
-| `LICENSE`           | MIT license for open sharing                 |
+- `demographic.py`  
+  Summarizes and plots basic demographic distributions of the participant pool (e.g., age, gender, chronotype scores).
 
 ## 🛠 Tools Used
 
-- BrainVision Analyzer (BVA)
-- Python (pandas, matplotlib, scipy)
-- EEG experimental design and statistical testing
+- `pandas`, `numpy` for data processing  
+- `matplotlib`, `seaborn` for visualization  
+- `scipy.stats` and `statsmodels` for statistical testing
 
----
-
-🧾 **Note**: This project demonstrates full-cycle EEG research skills, even without statistically significant group-level findings — reflecting the realities of open science and reproducible workflows.
+These scripts reflect the full analysis pipeline, even in the absence of statistically significant results, and demonstrate core research and coding skills for EEG and cognitive task analysis.
