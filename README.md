@@ -23,7 +23,7 @@ To examine how individual chronotypes (evening-types) and time of day (morning v
 ## 📎 Files
 
 - `poster.pdf`: Summarizes the study and findings
-- `analysis_script.py`: Core statistical analysis (if applicable)
+- `analysis_script.py`: Core statistical analysis 
 - Screenshots of preprocessing steps in BrainVision Analyzer
 
 ## 📚 Tools & Skills
