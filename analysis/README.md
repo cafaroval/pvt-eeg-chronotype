@@ -18,7 +18,7 @@ This folder contains Python scripts used to analyze EEG and behavioral data coll
 - `pandas`, `numpy` for data manipulation  
 - `matplotlib`, `seaborn` for visualization  
 - `statsmodels` for statistical modeling (ANOVA, linear mixed models)  
-- *(optional)* `csv` for initial data cleaning steps
+- `csv` for initial data cleaning steps
 
 ## 💡 Notes
 
