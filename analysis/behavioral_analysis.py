@@ -1,60 +1,87 @@
+"""
+Behavioral Analysis – Reaction Times in the PVT
+Author: Lala Jafarova
+Description: This script analyzes reaction time data from a Psychomotor Vigilance Task (PVT)
+administered at two times of day. Includes repeated measures ANOVA, outlier removal, and 
+a linear mixed-effects model.
+"""
+
+# ----------------------------- #
+#  Import Packages
+# ----------------------------- #
 import pandas as pd
-from statsmodels.stats.anova import AnovaRM
-from statsmodels.formula.api import mixedlm
 import matplotlib.pyplot as plt
 import seaborn as sns
+from statsmodels.stats.anova import AnovaRM
+from statsmodels.formula.api import mixedlm
 
-# Load the data
-data = pd.read_csv('PVT_Behavioral_Lala.csv')
+# ----------------------------- #
+#  Load and Prepare Data
+# ----------------------------- #
+df = pd.read_csv('PVT_Behavioral_Lala.csv')
 
-# Preprocess the data
-# Filter for correct responses if 'Accuracy' column is present and correct responses are marked as 1
-df = data[data['Accuracy'] == 1]
+# Filter for correct responses ( Accuracy == 1)
+df = df[df['Accuracy'] == 1]
 
-# Check for missing values and handle them (if any)
+# Drop rows with missing reaction times
 df = df.dropna(subset=['ReactionTime'])
 
-# Aggregate data: compute the mean reaction time for each participant at each time of day
+# ----------------------------- #
+#  Aggregate Reaction Times
+# ----------------------------- #
+# Compute mean RT per participant per condition
 agg_df = df.groupby(['Participant', 'Time'], as_index=False).agg({'ReactionTime': 'mean'})
 
-# Perform repeated measures ANOVA
+# ----------------------------- #
+#  Repeated Measures ANOVA
+# ----------------------------- #
+print("\n Repeated Measures ANOVA:")
 aovrm = AnovaRM(agg_df, 'ReactionTime', 'Participant', within=['Time'])
-res = aovrm.fit()
-print(res)
+anova_result = aovrm.fit()
+print(anova_result)
 
-#-----Plotting with and without Outliers---------------------
-#Plotting boxplot of reaction times by time of day
-
-plt.figure(figsize=(10, 6))
+# ----------------------------- #
+#  Boxplot (Raw RTs)
+# ----------------------------- #
+plt.figure(figsize=(8, 6))
 sns.boxplot(data=df, x='Time', y='ReactionTime')
+plt.title('Reaction Times by Time of Day (All Data)')
 plt.xlabel('Time of Day')
-plt.ylabel('Reaction Time')
-plt.title('Distribution of Reaction Times by Time of Day')
+plt.ylabel('Reaction Time (ms)')
 plt.grid(True)
+plt.tight_layout()
 plt.show()
 
-# Identifying and removing outliers
+# ----------------------------- #
+#  Outlier Removal Function
+# ----------------------------- #
 def remove_outliers(df, column):
     Q1 = df[column].quantile(0.25)
     Q3 = df[column].quantile(0.75)
     IQR = Q3 - Q1
-    lower_bound = Q1 - 1.5 * IQR
-    upper_bound = Q3 + 1.5 * IQR
-    return df[(df[column] >= lower_bound) & (df[column] <= upper_bound)]
+    lower = Q1 - 1.5 * IQR
+    upper = Q3 + 1.5 * IQR
+    return df[(df[column] >= lower) & (df[column] <= upper)]
 
-# Removing outliers from the aggregated data
-cleaned_agg_df = remove_outliers(agg_df, 'ReactionTime')
+# Remove outliers from aggregated data
+cleaned_df = remove_outliers(agg_df, 'ReactionTime')
 
-# Linear Mixed-Effects Model
-model = mixedlm("ReactionTime ~ Time", cleaned_agg_df, groups=cleaned_agg_df["Participant"])
-result = model.fit()
-print(result.summary())
+# ----------------------------- #
+#  Linear Mixed Effects Model
+# ----------------------------- #
+print("\n Linear Mixed Effects Model (after outlier removal):")
+lme_model = mixedlm("ReactionTime ~ Time", cleaned_df, groups=cleaned_df["Participant"])
+lme_result = lme_model.fit()
+print(lme_result.summary())
 
-# Plotting boxplot of reaction times by time of day after removing outliers
-plt.figure(figsize=(10, 6))
-sns.boxplot(data=cleaned_agg_df, x='Time', y='ReactionTime')
+# ----------------------------- #
+#  Boxplot (Outliers Removed)
+# ----------------------------- #
+plt.figure(figsize=(8, 6))
+sns.boxplot(data=cleaned_df, x='Time', y='ReactionTime')
+plt.title('Reaction Times by Time of Day (Outliers Removed)')
 plt.xlabel('Time of Day')
-plt.ylabel('Reaction Time')
-plt.title('Distribution of Reaction Times by Time of Day (Outliers Removed)')
+plt.ylabel('Reaction Time (ms)')
 plt.grid(True)
+plt.tight_layout()
 plt.show()
